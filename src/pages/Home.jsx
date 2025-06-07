@@ -10,7 +10,7 @@ import experienceImg from '../assets/images/experience.png';
 
 import Subtitle from "./../shared/Subtitle";
 
-import SearchBar from "../shared/SearchBar";
+// import SearchBar from "../shared/SearchBar";
 import ServiceList from "../services/ServiceList";
 import FeaturedTourList from "../components/Featureed-tours/FeaturedTourList";
 import MasonryImagesGallery from "../components/Image-gallery/MasonryImagesGallery";
@@ -68,9 +68,9 @@ const Home = () => {
                 <img src={heroImg02} alt="" />
               </div>
             </Col>
-            <center>
+            {/* <center>
               <SearchBar />
-            </center>
+            </center> */}
           </Row>
         </Container>
       </section>

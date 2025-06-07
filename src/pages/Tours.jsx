@@ -3,7 +3,7 @@ import CommonSection from "../shared/CommonSection";
 
 import "../styles/tour.css";
 import TourCard from "./../shared/TourCard";
-import SearchBar from "./../shared/SearchBar";
+// import SearchBar from "./../shared/SearchBar";
 import { Container, Row, Col } from "reactstrap";
 
 import useFetch from'../hooks/useFetch.js'
@@ -28,9 +28,9 @@ const Tours = () => {
       <section>
         <Container>
           <Row>
-            <center>
+            {/* <center>
             <SearchBar />
-            </center>
+            </center> */}
           </Row>
         </Container>
       </section>

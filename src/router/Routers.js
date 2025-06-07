@@ -14,6 +14,12 @@ import Vehicals from '../pages/Vehicals'
 import Customization from '../pages/Customization'
 import EmailForm from '../shared/EmailForm'
 
+import AdminDashboard from '../admin/Dashboard'
+import CreateTour from '../admin/CreateTour'
+import UpdateTour from '../admin/UpdateTour'
+import UpdateTourForm from '../admin/UpdateTourForm'
+import AdminBookings from '../admin/AdminBookings'
+
 const Router = () => {
   return (
     <Routes>
@@ -30,6 +36,13 @@ const Router = () => {
         <Route path='/vehicals' element={<Vehicals />} />
         <Route path='/customization' element={<Customization />} />
         <Route path='/email' element={<EmailForm />} />
+
+        <Route path='/admin/dashboard' element={<AdminDashboard />} />
+        <Route path="/create-tour" element={<CreateTour />} />
+        <Route path="/update-tour" element={<UpdateTour />} />
+        <Route path="/update-tour/:id" element={<UpdateTourForm />} />
+        <Route path='admin/bookings' element={<AdminBookings/>} />
+
        
     </Routes>
   )
