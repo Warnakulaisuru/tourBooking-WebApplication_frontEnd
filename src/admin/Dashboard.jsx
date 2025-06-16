@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+// import React from "react";
+// import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const stats = [
@@ -37,7 +37,7 @@ const Dashboard = () => {
           📈 Revenue Breakdown Chart Placeholder
         </div>
       </div>
-<div className="flex space-x-4 mt-12">
+{/* <div className="flex space-x-4 mt-12">
         <Link
           to="/create-tour"
           className="bg-[#3AAFA9] text-white px-6 py-3 rounded-xl shadow hover:bg-[#2B7A78] transition"
@@ -58,7 +58,7 @@ const Dashboard = () => {
         >
            Bookings
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 };
