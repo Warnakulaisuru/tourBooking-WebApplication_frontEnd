@@ -13,6 +13,7 @@ import TourGuide from '../pages/TourGuide'
 import Vehicals from '../pages/Vehicals'
 import Customization from '../pages/Customization'
 import EmailForm from '../shared/EmailForm'
+import PaymentPage from '../pages/Payment'
 
 import AdminDashboard from '../admin/Dashboard'
 import CreateTour from '../admin/CreateTour'
@@ -36,6 +37,7 @@ const Router = () => {
         <Route path='/vehicals' element={<Vehicals />} />
         <Route path='/customization' element={<Customization />} />
         <Route path='/email' element={<EmailForm />} />
+        <Route path='/payment/:id' element={<PaymentPage/>} />
 
         <Route path='/admin/dashboard' element={<AdminDashboard />} />
         <Route path="/create-tour" element={<CreateTour />} />
