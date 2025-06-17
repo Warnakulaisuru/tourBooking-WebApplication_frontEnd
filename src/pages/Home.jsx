@@ -12,7 +12,7 @@ import Subtitle from "./../shared/Subtitle";
 
 // import SearchBar from "../shared/SearchBar";
 import ServiceList from "../services/ServiceList";
-import FeaturedTourList from "../components/Featureed-tours/FeaturedTourList";
+// import FeaturedTourList from "../components/Featureed-tours/FeaturedTourList";
 import MasonryImagesGallery from "../components/Image-gallery/MasonryImagesGallery";
 import Testimonials from "../components/Testimonial/Testimonials";
 // import Newsletter from "../shared/Newsletter";
@@ -79,22 +79,22 @@ const Home = () => {
       <br />
 
       {/* --featured tour section start-- */}
-      <section>
+      {/* <section>
         <Container>
           <Row>
-            <Col lg="12 className=" mb-5>
+            <Col lg="12" className="mb-5">
               <Subtitle Subtitle={"Explore"} />
               <h2 className="featured_tour-title">Our featured tours</h2>
             </Col>
             <FeaturedTourList />
           </Row>
         </Container>
-      </section>
+      </section> */}
       {/* --featured tour section end-- */}
 
       <br />
 
-      <sction>
+      <section>
         <Container>
           <Row>
             <Col lg="3">
@@ -104,7 +104,7 @@ const Home = () => {
             <ServiceList />
           </Row>
         </Container>
-      </sction>
+      </section>
 
       <br/>
 
@@ -151,10 +151,10 @@ const Home = () => {
         <Container>
           <Row>
             <Col lg='12'>
-            <Subtitle Subtitle={"Gallery"} />
-            <h2 className="galley__title">
-              Visit our customers tour gallery
-            </h2>
+              <Subtitle Subtitle={"Gallery"} />
+              <h2 className="galley__title">
+                Visit our customers tour gallery
+              </h2>
             </Col>
             <Col lg='12'>
               <MasonryImagesGallery />
@@ -169,10 +169,10 @@ const Home = () => {
         <Container>
           <Row>
             <Col lg='12'>
-            <Subtitle Subtitle={"Fans Love"} />
-            <h2 className="testimonial__title">
-              What our fans say about us
-            </h2>
+              <Subtitle Subtitle={"Fans Love"} />
+              <h2 className="testimonial__title">
+                What our fans say about us
+              </h2>
             </Col>
             <Col lg='12'>
               <Testimonials />

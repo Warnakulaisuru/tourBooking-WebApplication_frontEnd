@@ -15,11 +15,16 @@ const FeaturedTourList = () => {
   return (
     <>
       {loading && <h4>Loading............</h4>}
-      {error && <h4>{error}</h4>}
+      {error && <h4 className="text-danger">{error}</h4>}
+
+      {!loading && !error && FeaturedTours?.length === 0 && (
+        <h5>No featured tours found.</h5>
+      )}
+
       {!loading &&
         !error &&
         FeaturedTours?.map((tour) => (
-          <Col lg="3" className="mb-3" key={tour.id}>
+          <Col lg="3" className="mb-3" key={tour._id || tour.id}>
             <TourCard tour={tour} />
           </Col>
         ))}

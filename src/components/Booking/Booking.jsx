@@ -220,12 +220,12 @@
 
 // export default Booking;
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import "./booking.css";
 import { Form, FormGroup, ListGroup, ListGroupItem, Button } from "reactstrap";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { isValidPhoneNumber } from "libphonenumber-js";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../utils/config";
 import { AuthContext } from "../../context/AuthContext";
@@ -235,6 +235,7 @@ const Booking = ({ tour, avgRating }) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
+  // Booking state
   const [booking, setBooking] = useState({
     userId: user && user._id,
     userEmail: user && user.email,
@@ -244,8 +245,41 @@ const Booking = ({ tour, avgRating }) => {
     bookAt: "",
     guestSize: "1",
   });
+
   const [errors, setErrors] = useState({});
   const [buttonText, setButtonText] = useState("Book Now");
+
+  // Fetch detailed user info from backend on mount
+  useEffect(() => {
+    if (!user || !user._id) return;
+
+    const fetchUserData = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/users/${user._id}`, {
+          method: "GET",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (!res.ok) {
+          const errData = await res.json();
+          throw new Error(errData.message || "Failed to fetch user");
+        }
+
+        const data = await res.json();
+        setBooking((prev) => ({
+          ...prev,
+          fullName: data.data.username || "",
+          userEmail: data.data.email || "",
+          phone: data.data.phone || "",
+        }));
+      } catch (error) {
+        console.error("Error fetching user data:", error.message);
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -263,8 +297,9 @@ const Booking = ({ tour, avgRating }) => {
       if (value.trim() === "") {
         setErrors((prev) => ({ ...prev, phone: "Phone number is required" }));
       } else {
-        const phoneNumber = isValidPhoneNumber(value, country.countryCode);
-        if (!phoneNumber) {
+        // react-phone-input-2 returns value without '+' prefix
+        const phoneNumber = parsePhoneNumberFromString("+" + value);
+        if (!phoneNumber || !phoneNumber.isValid()) {
           setErrors((prev) => ({ ...prev, phone: "Invalid phone number" }));
         } else {
           setErrors((prev) => ({ ...prev, phone: "" }));
@@ -275,6 +310,18 @@ const Booking = ({ tour, avgRating }) => {
       setErrors((prev) => ({ ...prev, phone: "Invalid phone number" }));
     }
   };
+
+  // Calculate minimum booking date (7 days from today)
+  const getMinBookingDate = () => {
+    const today = new Date();
+    today.setDate(today.getDate() + 7);
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const minBookingDate = getMinBookingDate();
 
   const serviceFee = 10;
   const totalAmount =
@@ -291,11 +338,22 @@ const Booking = ({ tour, avgRating }) => {
         return;
       }
 
+      // Validate phone again before submit
+      const phoneNumber = parsePhoneNumberFromString("+" + booking.phone);
+      if (!phoneNumber || !phoneNumber.isValid()) {
+        alert("Please enter a valid phone number");
+        setButtonText("Book Now");
+        return;
+      }
+
       const bookingDate = new Date(booking.bookAt);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      if (bookingDate < today) {
-        alert("Booking date must be in the future.");
+
+      // Enforce min date rule on submit as well
+      const minDate = new Date(minBookingDate);
+      if (bookingDate < minDate) {
+        alert(`Booking date must be on or after ${minBookingDate}.`);
         setButtonText("Book Now");
         return;
       }
@@ -318,7 +376,6 @@ const Booking = ({ tour, avgRating }) => {
 
       alert("Booking successful! Your tour is pending admin confirmation.");
       navigate("/thank-you");
-
     } catch (err) {
       alert(err.message);
       setButtonText("Book Now");
@@ -346,6 +403,7 @@ const Booking = ({ tour, avgRating }) => {
               placeholder="Full Name"
               id="fullName"
               required
+              value={booking.fullName}
               onChange={handleChange}
             />
           </FormGroup>
@@ -354,10 +412,12 @@ const Booking = ({ tour, avgRating }) => {
             <input
               type="email"
               placeholder="Your email"
-              id="email"
+              id="userEmail"
               name="email"
               required
+              value={booking.userEmail}
               onChange={handleChange}
+              readOnly
             />
           </FormGroup>
 
@@ -374,8 +434,15 @@ const Booking = ({ tour, avgRating }) => {
             />
             {errors.phone && <div className="error">{errors.phone}</div>}
           </FormGroup>
+
           <FormGroup className="d-flex align-items-center gap-3">
-            <input type="date" id="bookAt" required onChange={handleChange} />
+            <input
+              type="date"
+              id="bookAt"
+              required
+              min={minBookingDate}
+              onChange={handleChange}
+            />
             <input
               type="number"
               placeholder="Guest Size"
@@ -383,8 +450,10 @@ const Booking = ({ tour, avgRating }) => {
               value={booking.guestSize}
               required
               onChange={handleChange}
+              min="1"
             />
           </FormGroup>
+
           <Button
             type="submit"
             className="btn primary__btn w-100 mt-4"
